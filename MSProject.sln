@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35201.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking", "Parking\Parking.csproj", "{A8A35ACF-F7E6-4253-AAC0-5F55065AC002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification", "Notification\Notification.csproj", "{B42053FF-6238-4B0A-A817-D9D75028221F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8A35ACF-F7E6-4253-AAC0-5F55065AC002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A35ACF-F7E6-4253-AAC0-5F55065AC002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A35ACF-F7E6-4253-AAC0-5F55065AC002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A35ACF-F7E6-4253-AAC0-5F55065AC002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B42053FF-6238-4B0A-A817-D9D75028221F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B42053FF-6238-4B0A-A817-D9D75028221F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B42053FF-6238-4B0A-A817-D9D75028221F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B42053FF-6238-4B0A-A817-D9D75028221F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {39BC9D8E-84D7-4A17-89FA-D76E81D15840}
+	EndGlobalSection
+EndGlobal
