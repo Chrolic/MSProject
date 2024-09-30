@@ -1,0 +1,56 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: parking-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parking-api
+  template:
+    metadata:
+      labels:
+        app: parking-api
+    spec:
+      containers:
+        - name: parking # Assigns the name
+          image: parking-api # Specifies image, can be refering to online repo like dockerhub
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080 # Specifies which port the container will listen on
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification # Assigns the name
+          image: notification-service # Specifies image, can be refering to online repo like dockerhub
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 7080 # Specifies which port the container will listen on
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: parking-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+    - name: parking-api
+      port: 5000
+      targetPort: 8080 #Has to target the port of the service (ie. if containerport is set to 6090, this has to be 6090)
+  selector:
+    app: parking-api

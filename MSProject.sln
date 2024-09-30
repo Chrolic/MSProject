@@ -5,7 +5,13 @@ VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parking", "Parking\Parking.csproj", "{A8A35ACF-F7E6-4253-AAC0-5F55065AC002}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification", "Notification\Notification.csproj", "{B42053FF-6238-4B0A-A817-D9D75028221F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification", "Notification\Notification.csproj", "{B42053FF-6238-4B0A-A817-D9D75028221F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B6C01CAA-6B31-4AF3-84EF-6FF9DD07A5C3}"
+	ProjectSection(SolutionItems) = preProject
+		dashboarduser.yaml = dashboarduser.yaml
+		deployment.yaml = deployment.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
