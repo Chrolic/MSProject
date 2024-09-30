@@ -13,8 +13,8 @@ spec:
         app: parking-api
     spec:
       containers:
-        - name: parking # Assigns the name
-          image: parking-api # Specifies image, can be refering to online repo like dockerhub
+        - name: parking-api-container # Assigns the name
+          image: parking-api:1.0 # Specifies image, can be refering to online repo like dockerhub
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080 # Specifies which port the container will listen on
@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: notification # Assigns the name
-          image: notification-service # Specifies image, can be refering to online repo like dockerhub
+          image: notification-service:1.0 # Specifies image, can be refering to online repo like dockerhub
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 7080 # Specifies which port the container will listen on

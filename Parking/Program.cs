@@ -2,6 +2,7 @@ using Parking.Services;
 using Parking.Services.Interfaces;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Polly;
+using Notification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,11 +22,17 @@ builder.Services.Scan(selector => selector
         .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
         .AsImplementedInterfaces());
 
+builder.Services.Scan(selector => selector
+        .FromAssemblyOf<Anchor>()
+        .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
+        .AsImplementedInterfaces());
+
 // Add Data
 builder.Services.Scan(selector => selector
         .FromAssemblyOf<Program>()
         .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Database")))
         .AsImplementedInterfaces());
+
 
 // Add httpclient with Polly
 builder.Services.AddHttpClient<IMotorAPIService, MotorAPIService>()
