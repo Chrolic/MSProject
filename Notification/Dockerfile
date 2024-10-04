@@ -12,6 +12,10 @@ EXPOSE 7081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+# Referenced projects
+COPY ["EventStore/EventStore.csproj", "EventStore/"]
+
 COPY ["Notification/Notification.csproj", "Notification/"]
 RUN dotnet restore "Notification/Notification.csproj"
 COPY . .

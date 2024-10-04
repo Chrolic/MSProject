@@ -1,6 +1,6 @@
 ﻿namespace Notification
 {
-    public class Anchor
+    public class NotificationAnchor
     {
     }
 }
