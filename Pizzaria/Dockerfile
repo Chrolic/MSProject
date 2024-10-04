@@ -4,8 +4,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 7080
-EXPOSE 7081
+EXPOSE 6000
+EXPOSE 6001
 
 
 # This stage is used to build the service project
@@ -13,22 +13,19 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Referenced projects
-COPY ["EventStore/EventStore.csproj", "EventStore/"]
-
-COPY ["Notification/Notification.csproj", "Notification/"]
-RUN dotnet restore "Notification/Notification.csproj"
+COPY ["Pizzaria/Pizzaria.csproj", "Pizzaria/"]
+RUN dotnet restore "Pizzaria/Pizzaria.csproj"
 COPY . .
-WORKDIR "/src/Notification"
-RUN dotnet build "Notification.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Pizzaria"
+RUN dotnet build "Pizzaria.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Notification.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Pizzaria.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Notification.dll"]
+ENTRYPOINT ["dotnet", "Pizzaria.dll"]

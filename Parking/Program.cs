@@ -22,10 +22,10 @@ builder.Services.Scan(selector => selector
         .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
         .AsImplementedInterfaces());
 
-builder.Services.Scan(selector => selector
-        .FromAssemblyOf<NotificationAnchor>()
-        .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
-        .AsImplementedInterfaces());
+//builder.Services.Scan(selector => selector
+//        .FromAssemblyOf<NotificationAnchor>()
+//        .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
+//        .AsImplementedInterfaces());
 
 // Add Data
 builder.Services.Scan(selector => selector

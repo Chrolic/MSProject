@@ -1,4 +1,5 @@
 using EventStore;
+using Notification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.Scan(selector => selector
-        .FromAssemblyOf<EventStoreAnchor>()
+        .FromAssemblyOf<NotificationAnchor>()
         .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
         .AsImplementedInterfaces());
 

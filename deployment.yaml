@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: parking-api-container # Assigns the name
-          image: parking-api:1.0 # Specifies image, can be refering to online repo like dockerhub
+          image: parking-api:1.1 # Specifies image, can be refering to online repo like dockerhub
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9000 # Specifies which port the container will listen on
@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: notification # Assigns the name
-          image: notification-service:1.0 # Specifies image, can be refering to online repo like dockerhub
+          image: notification-service:1.1 # Specifies image, can be refering to online repo like dockerhub
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000 # Specifies which port the container will listen on
@@ -58,10 +58,32 @@ spec:
     spec:
       containers:
         - name: eventstore # Assigns the name
-          image: eventstore-service:1.5 # Specifies image, can be refering to online repo like dockerhub
+          image: eventstore-service:1.6 # Specifies image, can be refering to online repo like dockerhub
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 7000 # Specifies which port the container will listen on
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pizzaria-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pizzaria-service
+  template:
+    metadata:
+      labels:
+        app: pizzaria-service
+    spec:
+      containers:
+        - name: pizzaria # Assigns the name
+          image: pizzaria-service:1.1 # Specifies image, can be refering to online repo like dockerhub
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6000 # Specifies which port the container will listen on
 ---
 
 apiVersion: v1
@@ -90,3 +112,17 @@ spec:
       targetPort: 8080
   selector:
     app: eventstore-service
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pizzaria-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+    - name: pizzaria-api
+      port: 5200
+      targetPort: 8080
+  selector:
+    app: pizzaria-service

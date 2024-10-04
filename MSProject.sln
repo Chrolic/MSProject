@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventStore", "EventStore\Ev
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4A956945-7A9E-4F60-9FB7-29B9B59A88CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pizzaria", "..\Pizzaria\Pizzaria.csproj", "{FFFA0BAC-9E52-4B50-A4A8-F0969DE9D845}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pizzaria", "Pizzaria\Pizzaria.csproj", "{72099ACC-2178-4646-B9CB-608AC0AD59B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +42,10 @@ Global
 		{4A956945-7A9E-4F60-9FB7-29B9B59A88CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A956945-7A9E-4F60-9FB7-29B9B59A88CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A956945-7A9E-4F60-9FB7-29B9B59A88CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFFA0BAC-9E52-4B50-A4A8-F0969DE9D845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFFA0BAC-9E52-4B50-A4A8-F0969DE9D845}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFFA0BAC-9E52-4B50-A4A8-F0969DE9D845}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFFA0BAC-9E52-4B50-A4A8-F0969DE9D845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72099ACC-2178-4646-B9CB-608AC0AD59B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72099ACC-2178-4646-B9CB-608AC0AD59B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72099ACC-2178-4646-B9CB-608AC0AD59B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72099ACC-2178-4646-B9CB-608AC0AD59B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
