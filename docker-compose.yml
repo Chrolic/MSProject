@@ -1,0 +1,21 @@
+services:
+
+
+  parking:
+    image: ${DOCKER_REGISTRY-}parking
+    build:
+      context: .
+      dockerfile: Parking/Dockerfile
+
+  Notification:
+    image: ${DOCKER_REGISTRY-}notification
+    build:
+      context: .
+      dockerfile: Notification/Dockerfile
+
+
+  EventStore:
+    image: ${DOCKER_REGISTRY-}eventstore
+    build:
+      context: .
+      dockerfile: EventStore/Dockerfile

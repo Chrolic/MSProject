@@ -23,7 +23,7 @@ builder.Services.Scan(selector => selector
         .AsImplementedInterfaces());
 
 builder.Services.Scan(selector => selector
-        .FromAssemblyOf<Anchor>()
+        .FromAssemblyOf<NotificationAnchor>()
         .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
         .AsImplementedInterfaces());
 
