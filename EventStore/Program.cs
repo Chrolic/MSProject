@@ -14,9 +14,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.Scan(selector => selector
         .FromAssemblyOf<EventStoreAnchor>()
         .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
-        .AsImplementedInterfaces());
+        .AsImplementedInterfaces()
+        .WithTransientLifetime());
 
-builder.Services.AddTransient<IEventService, EventService>();
+//builder.Services.AddTransient<IEventService, EventService>();
 
 var app = builder.Build();
 

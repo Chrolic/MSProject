@@ -5,33 +5,33 @@ using System.Net;
 using System.Text.Json;
 using Pizzaria.Utilities.Exceptions;
 using Pizzaria.Utilities.Models;
-using System.Threading;
+
 
 namespace Pizzaria.Services
 {
     public class PizzariaService : IPizzariaService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        public PizzariaService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public PizzariaService(IConfiguration configuration)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = new HttpClient();
             _configuration = configuration;
         }
 
 
         public async Task<ReadEventDto> PlaceOrder(CreateOrderDto dto, CancellationToken cancellationToken)
         {
-            string url = $"http://localhost:5100/event/CreateEvent"; // move to appsettings, should be internal service route instead.
-
-            using (var httpClient = _httpClientFactory.CreateClient())
+            string url = _configuration.GetValue<string>("EventStoreUrl") + "CreateEvent";
+            var requestJson = ConvertNewPizzariaOrderToJson(dto);
+            
+            using (_httpClient)
             {
-                httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var requestJson = ConvertNewPizzariaOrderToJson(dto);
-                var result = await httpClient.PostAsJsonAsync(url, requestJson, cancellationToken);
+                var result = await _httpClient.PostAsJsonAsync(url, requestJson, cancellationToken);
 
 
                 if (result.IsSuccessStatusCode)

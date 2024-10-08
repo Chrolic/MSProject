@@ -5,12 +5,14 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileContext>..\MSProject</DockerfileContext>
+		<DockerfileContext>.</DockerfileContext>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<UserSecretsId>e7d3f289-46d3-4698-b7c4-e985ab335dd5</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.8" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
 		<PackageReference Include="Polly" Version="8.4.2" />
 		<PackageReference Include="Scrutor" Version="5.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />

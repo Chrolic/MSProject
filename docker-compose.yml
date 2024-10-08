@@ -6,12 +6,16 @@ services:
     build:
       context: .
       dockerfile: Parking/Dockerfile
+    ports:
+       - "9100:9100"
 
   Notification:
     image: ${DOCKER_REGISTRY-}notification
     build:
       context: .
       dockerfile: Notification/Dockerfile
+    ports:
+       - "9200:9200"
 
 
   EventStore:
@@ -19,6 +23,8 @@ services:
     build:
       context: .
       dockerfile: EventStore/Dockerfile
+    ports:
+       - "9300:9300"
 
 
   Pizzaria:
@@ -26,3 +32,5 @@ services:
     build:
       context: .
       dockerfile: Pizzaria/Dockerfile
+    ports:
+       - "9400:9400"

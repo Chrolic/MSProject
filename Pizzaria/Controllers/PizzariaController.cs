@@ -26,9 +26,9 @@ namespace Pizzaria.Controllers
         //}
 
         [HttpPost]
-        public IActionResult PlaceOrder([FromBody] CreateOrderDto dto)
+        public async Task<IActionResult> PlaceOrderAsync([FromBody] CreateOrderDto dto)
         {
-            var result = _pizzariaService.PlaceOrder(dto, HttpContext.RequestAborted);
+            var result = await _pizzariaService.PlaceOrder(dto, HttpContext.RequestAborted);
             return new OkObjectResult(result);
         }
     }

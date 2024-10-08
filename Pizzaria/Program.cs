@@ -10,21 +10,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add Configuration
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
 builder.Services.Scan(selector => selector
         .FromAssemblyOf<Program>()
         .AddClasses(classes => classes.Where(x => x.Name.EndsWith("Service")))
         .AsImplementedInterfaces());
-
-// Add httpclient with Polly
-builder.Services.AddHttpClient<IPizzariaService, PizzariaService>()
-    .AddTransientHttpErrorPolicy(x => x.WaitAndRetryAsync(3, attempt => TimeSpan.FromSeconds(1000 * Math.Pow(2, attempt))));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseSwagger();
