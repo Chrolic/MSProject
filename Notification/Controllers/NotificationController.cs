@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EventStore.Utilities.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using Notification.Services.Interfaces;
 
 namespace Notification.Controllers
@@ -15,6 +16,14 @@ namespace Notification.Controllers
             _notificationService = notificationService;
         }
 
+
+        [HttpPost]
+        [ProducesResponseType(201)]
+        public IActionResult TestConnectionToEventStore([FromBody] CreateEventDto dto)
+        {
+            _notificationService.TestConnectionToEventStore(dto, HttpContext.RequestAborted);
+            return new OkResult();
+        }
 
         [HttpPost]
         [ProducesResponseType(201)]

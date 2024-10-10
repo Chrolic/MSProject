@@ -22,8 +22,6 @@ namespace EventStore.Services
             e.SequenceNumber <= lastEventSequenceNumber)
                 .OrderBy(e => e.SequenceNumber);
 
-            
-
             return result.Select(x => new ReadEventDto()
             {
                 SequenceNumber = x.SequenceNumber,
@@ -35,6 +33,7 @@ namespace EventStore.Services
 
         public ReadEventDto CreateEvent(CreateEventDto dto)
         {
+            Console.WriteLine("Received request to create event: " + dto);
             var newEvent = Raise(dto.EventName, dto.Content);
             return new ReadEventDto
             { 
@@ -51,6 +50,16 @@ namespace EventStore.Services
             var newEvent = new Event(seqNumber, DateTimeOffset.UtcNow, eventName, content);
             _database.Add(newEvent);
             return newEvent;
+        }
+
+        public void DeleteEvent(long seqNum)
+        {
+            var ev = _database.Where(x => x.SequenceNumber == seqNum).FirstOrDefault();
+            
+            if (ev != null)
+            {
+                _database.Remove(ev);
+            }
         }
     }
 }

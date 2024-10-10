@@ -1,5 +1,9 @@
-﻿using EventStore.Services.Interfaces;
-using Notification.Services.Interfaces;
+﻿using Notification.Services.Interfaces;
+using Newtonsoft.Json;
+using System.Text;
+using System.Threading;
+using RestSharp;
+using EventStore.Utilities.DTOs;
 
 namespace Notification.Services
 {
@@ -7,26 +11,23 @@ namespace Notification.Services
     {
         private readonly IEmailService _emailService;
         private readonly ISmsService _smsService;
-        private readonly IEventService _eventStore;
+        private static readonly HttpClient _client = new HttpClient();
 
-        public NotificationService(IEmailService emailService, ISmsService smsService, IEventService eventStore)
+        public NotificationService(IEmailService emailService, ISmsService smsService)
         {
             _emailService = emailService;
             _smsService = smsService;
-            _eventStore = eventStore;
         }
 
         public string TestEmail(string email)
         {
             var result = _emailService.SendTestEmail(email);
-            _eventStore.Raise("TestEmailSent", new { email });
             return result;
         }
 
         public string TestSms(string number)
         {
             var result = _smsService.SendTestSms(number);
-            _eventStore.Raise("TestSmsSent", new { number });
             return result;
         }
     }

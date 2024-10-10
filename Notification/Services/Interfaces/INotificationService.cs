@@ -1,4 +1,7 @@
-﻿namespace Notification.Services.Interfaces
+﻿
+using EventStore.Utilities.DTOs;
+
+namespace Notification.Services.Interfaces
 {
     public interface INotificationService
     {

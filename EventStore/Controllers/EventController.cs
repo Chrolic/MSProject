@@ -34,5 +34,12 @@ namespace EventStore.Controllers
             var result = _eventService.CreateEvent(dto);
             return new OkObjectResult(result);
         }
+
+        [HttpDelete]
+        public IActionResult DeleteEvent([FromBody] long seqNumber)
+        {
+            _eventService.DeleteEvent(seqNumber);
+            return new OkResult();
+        }
     }
 }

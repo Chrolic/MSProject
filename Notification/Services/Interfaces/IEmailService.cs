@@ -1,7 +1,8 @@
-﻿namespace Notification.Services.Interfaces
+﻿
+namespace Notification.Services.Interfaces
 {
     public interface IEmailService
     {
-        string SendTestEmail(string email);
+        void SendTestEmail(string email, CancellationToken cancellationToken);
     }
 }

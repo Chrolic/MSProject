@@ -1,17 +1,26 @@
 ﻿using Notification.Services.Interfaces;
+using Notification.Utilities.DTOs;
 
 namespace Notification.Services
 {
     public class EmailService : IEmailService
     {
-        public EmailService()
-        {
+        private readonly IEventStoreService _eventStoreService;
 
+        public EmailService(IEventStoreService eventStoreService)
+        {
+            _eventStoreService = eventStoreService;
         }
 
-        public string SendTestEmail(string email)
+        public void SendTestEmail(string email, CancellationToken cancellationToken)
         {
-            return "Hello from Notification service, email service";
+            // Create and send email.
+
+            _eventStoreService.CreateEvent(new CreateEventDto
+            {
+                EventName = "Email was sent",
+                Content = $"Email sent to: {email}"
+            }, cancellationToken);
         }
     }
 }

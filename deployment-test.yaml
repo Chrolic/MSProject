@@ -1,0 +1,33 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: eventstore-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventstore-service
+  template:
+    metadata:
+      labels:
+        app: eventstore-service
+    spec:
+      containers:
+        - name: eventstore # Assigns the name
+          image: eventstore-service:latest # Specifies image, can be refering to online repo like dockerhub
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 7000 # Specifies which port the container will listen on
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventstore-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+    - name: eventstore-loadbalancer-port
+      port: 7000
+      targetPort: 8080
+  selector:
+    app: eventstore-service
