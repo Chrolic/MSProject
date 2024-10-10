@@ -5,7 +5,7 @@ namespace Notification.Services.Interfaces
 {
     public interface INotificationService
     {
-        string TestEmail(string email);
-        string TestSms(string number);
+        void TestEmail(string email, CancellationToken cancellationToken);
+        void TestSms(string number, CancellationToken cancellationToken);
     }
 }

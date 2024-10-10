@@ -1,17 +1,27 @@
 ﻿using Notification.Services.Interfaces;
+using Notification.Utilities.DTOs;
+using System.Threading;
 
 namespace Notification.Services
 {
     public class SmsService : ISmsService
     {
-        public SmsService()
+        private readonly IEventStoreService _eventStoreService;
+
+        public SmsService(IEventStoreService eventStoreService)
         {
-            
+            _eventStoreService = eventStoreService;
         }
 
-        public string SendTestSms(string number)
+        public void SendTestSms(string number, CancellationToken cancellationToken)
         {
-            return "Hello from Notification service, sms service";
+            // Create and send sms
+
+            _eventStoreService.CreateEvent(new CreateEventDto
+            {
+                EventName = "Sms was sent",
+                Content = $"Sms sent to: {number}"
+            }, cancellationToken);
         }
     }
 }

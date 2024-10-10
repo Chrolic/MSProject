@@ -19,26 +19,18 @@ namespace Notification.Controllers
 
         [HttpPost]
         [ProducesResponseType(201)]
-        public IActionResult TestConnectionToEventStore([FromBody] CreateEventDto dto)
-        {
-            _notificationService.TestConnectionToEventStore(dto, HttpContext.RequestAborted);
-            return new OkResult();
-        }
-
-        [HttpPost]
-        [ProducesResponseType(201)]
         public IActionResult TestEmail([FromBody] string emailAddress)
         {
-            var result = _notificationService.TestEmail(emailAddress);
-            return new OkObjectResult(result);
+            _notificationService.TestEmail(emailAddress, HttpContext.RequestAborted);
+            return new OkResult();
         }
 
         [HttpPut]
         [ProducesResponseType(204)]
         public IActionResult TestSms([FromBody] string phoneNumber)
         {
-            var result = _notificationService.TestSms(phoneNumber);
-            return new OkObjectResult(result);
+            _notificationService.TestSms(phoneNumber, HttpContext.RequestAborted);
+            return new OkResult();
         }
     }
 }

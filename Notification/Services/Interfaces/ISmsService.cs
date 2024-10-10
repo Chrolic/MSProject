@@ -2,6 +2,6 @@
 {
     public interface ISmsService
     {
-        string SendTestSms(string number);
+        void SendTestSms(string number, CancellationToken cancellationToken);
     }
 }

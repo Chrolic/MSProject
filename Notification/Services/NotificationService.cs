@@ -19,16 +19,14 @@ namespace Notification.Services
             _smsService = smsService;
         }
 
-        public string TestEmail(string email)
+        public void TestEmail(string email, CancellationToken cancellationToken)
         {
-            var result = _emailService.SendTestEmail(email);
-            return result;
+            _emailService.SendTestEmail(email, cancellationToken);
         }
 
-        public string TestSms(string number)
+        public void TestSms(string number, CancellationToken cancellationToken)
         {
-            var result = _smsService.SendTestSms(number);
-            return result;
+            _smsService.SendTestSms(number, cancellationToken);
         }
     }
 }
