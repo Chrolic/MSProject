@@ -1,10 +1,9 @@
 ﻿using Pizzaria.Services.Interfaces;
 using Pizzaria.Utilities.DTOs;
-using System.Net.Http.Headers;
-using System.Net;
 using System.Text.Json;
-using Pizzaria.Utilities.Exceptions;
 using Pizzaria.Utilities.Models;
+using RestSharp;
+using Newtonsoft.Json;
 
 
 namespace Pizzaria.Services
@@ -13,54 +12,31 @@ namespace Pizzaria.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        private readonly IEventStoreService _eventStoreService;
 
-        public PizzariaService(IConfiguration configuration)
+        public PizzariaService(IConfiguration configuration, IEventStoreService eventStoreService)
         {
             _httpClient = new HttpClient();
             _configuration = configuration;
+            _eventStoreService = eventStoreService;
         }
 
 
         public async Task<ReadEventDto> PlaceOrder(CreateOrderDto dto, CancellationToken cancellationToken)
         {
-            string url = _configuration.GetValue<string>("EventStoreUrl") + "CreateEvent";
-            var requestJson = ConvertNewPizzariaOrderToJson(dto);
-            
-            using (_httpClient)
-            {
-                _httpClient.DefaultRequestHeaders.Accept.Clear();
-                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // Some pizzaria specific business logic here.
 
-                var result = await _httpClient.PostAsJsonAsync(url, requestJson, cancellationToken);
+            // Log an event.
+            var eventDto = CreateEventDto(dto);
+            var response = await _eventStoreService.CreateEvent(eventDto, cancellationToken);
 
-
-                if (result.IsSuccessStatusCode)
-                {
-                    var eventDto = JsonSerializer.Deserialize<ReadEventDto>(result.Content.ReadAsStringAsync().Result);
-
-                    if (eventDto != null)
-                    {
-                        return eventDto;
-                    }
-
-                }
-                if (result.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ReadEventDto.NONE;
-                }
-                else
-                {
-                    throw new PizzariaException(result.StatusCode, result.Content);
-                }
-            }
-
+            return CreateReadEventDto(response);
         }
 
 
-        private string ConvertNewPizzariaOrderToJson(CreateOrderDto dto)
+        private CreateEventDto CreateEventDto(CreateOrderDto dto)
         {
-
-            return JsonSerializer.Serialize(new CreateEventDto
+            return new CreateEventDto
             {
                 EventName = "Pizzaria Order",
                 Content = new Order
@@ -72,7 +48,12 @@ namespace Pizzaria.Services
                     Table = dto.Table,
                     PizzaMenuNumber = dto.PizzaMenuNumber
                 }
-            });
+            };
+        }
+
+        private ReadEventDto CreateReadEventDto(RestResponse response)
+        {
+            return JsonConvert.DeserializeObject<ReadEventDto>(response.Content);
         }
     }
 }
