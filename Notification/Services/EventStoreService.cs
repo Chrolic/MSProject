@@ -6,15 +6,17 @@ namespace Notification.Services
 {
     public class EventStoreService : IEventStoreService
     {
-        public EventStoreService()
+        private readonly IConfiguration _configuration;
+
+        public EventStoreService(IConfiguration configuration)
         {
-            
+            _configuration = configuration;
         }
 
         public async void CreateEvent(CreateEventDto dto, CancellationToken cancellationToken)
         {
             // Create rest client
-            var client = new RestClient("http://localhost:7000");
+            var client = new RestClient(_configuration.GetValue<string>("EventStoreUrl"));
 
             // Create request
             var request = new RestRequest("/Event/CreateEvent", Method.Post);
