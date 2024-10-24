@@ -16,7 +16,7 @@ namespace UnitTests.UnitTests.Pizzaria
         }
 
         [Fact]
-        public async void TestPizzariaService()
+        public async void TestPizzariaController_PlaceOrder()
         {
             // Test pizzaria controller response using Nuget 'Moq'.
 
