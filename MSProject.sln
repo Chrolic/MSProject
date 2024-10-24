@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventStore", "EventStore\Ev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pizzaria", "Pizzaria\Pizzaria.csproj", "{A0A034C1-8BB8-4030-B1B7-C24D8E48F134}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{01A998C2-06D9-49AF-B153-13F6373CDE8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{A0A034C1-8BB8-4030-B1B7-C24D8E48F134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0A034C1-8BB8-4030-B1B7-C24D8E48F134}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0A034C1-8BB8-4030-B1B7-C24D8E48F134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01A998C2-06D9-49AF-B153-13F6373CDE8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01A998C2-06D9-49AF-B153-13F6373CDE8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01A998C2-06D9-49AF-B153-13F6373CDE8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01A998C2-06D9-49AF-B153-13F6373CDE8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
