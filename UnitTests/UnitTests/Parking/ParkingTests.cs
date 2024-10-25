@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Parking.Controllers;
+using Parking.Data.Interfaces;
+using Parking.Services;
 using Parking.Services.Interfaces;
 using Parking.Utilities.DTOs;
 
@@ -9,10 +12,12 @@ namespace UnitTests.UnitTests.Parking
     public class ParkingTests
     {
         private Mock<IParkingService> _parkingService;
+        private Mock<IParkingDatabase> _parkingDatabase;
 
         public ParkingTests()
         {
             _parkingService = new Mock<IParkingService>();
+            _parkingDatabase = new Mock<IParkingDatabase>();
         }
 
 
@@ -23,7 +28,6 @@ namespace UnitTests.UnitTests.Parking
             // Note: This only tests the controller, not the underlaying businesslogic in services.
 
             // ------- ARRANGE -------
-            var cancellationTokenSource = new CancellationTokenSource();
             var parkingController = new ParkingController(_parkingService.Object);
 
             var inputDto = new CarParkingDto
@@ -81,7 +85,6 @@ namespace UnitTests.UnitTests.Parking
             // Note: This only tests the controller, not the underlaying businesslogic in services.
 
             // ------- ARRANGE -------
-            var cancellationTokenSource = new CancellationTokenSource();
             var parkingController = new ParkingController(_parkingService.Object);
 
             var inputDto = new CarParkingDto
@@ -131,6 +134,211 @@ namespace UnitTests.UnitTests.Parking
             Assert.IsType<OkObjectResult>(resultObjectParkingStatus);
             Assert.Equal(200, resultObjectParkingStatus.StatusCode);
             Assert.Equal(returnDtoCarParkingStatus, resultObjectParkingStatus.Value);
+        }
+
+        [Fact]
+        public void TestParkingService_RegisterCarParkingEnd_NoRegistrationNumber_ExpectedException()
+        {
+            // Test controller endpoint using Nuget "Moq".
+            // Note: This test against a validity check, and is expected to fail due to no registration sent in DTO.
+
+            // ------- ARRANGE -------
+            var parkingService = new ParkingService(_parkingDatabase.Object);
+
+            var inputDto = new CarParkingDto
+            {
+                RegistrationNumber = null,
+                TimeOfParkingStart = DateTimeOffset.UtcNow.AddHours(-1),
+                TimeOfParkingEnd = DateTimeOffset.UtcNow,
+                TelephoneNumber = "+4542395827",
+                Email = "test@test.dk",
+                ParkingSpot = new ParkingSpotDto
+                {
+                    Lot = "B",
+                    Row = "4",
+                    Plot = "17"
+                }
+            };
+
+
+            // ------- ACT -------
+            Action act = () => parkingService.RegisterCarParkingEnd(inputDto);
+
+            
+
+            // ------- ASSERT -------
+            Assert.Throws<Exception>(act);
+            Exception exception = Assert.Throws<Exception>(act);
+            Assert.Equal("No registration number.", exception.Message);
+        }
+
+        [Fact]
+        public void TestParkingService_RegisterCarParkingEnd_DateTimeEndBeforeStart_ExpectedException()
+        {
+            // Test controller endpoint using Nuget "Moq".
+            // Note: This test against a validity check, and is expected to fail due to end time being before start time.
+
+            // ------- ARRANGE -------
+            var parkingService = new ParkingService(_parkingDatabase.Object);
+
+            var inputDto = new CarParkingDto
+            {
+                RegistrationNumber = "DR24465",
+                TimeOfParkingStart = DateTimeOffset.UtcNow.AddHours(-1),
+                TimeOfParkingEnd = DateTimeOffset.UtcNow.AddHours(-2),
+                TelephoneNumber = "+4542395827",
+                Email = "test@test.dk",
+                ParkingSpot = new ParkingSpotDto
+                {
+                    Lot = "B",
+                    Row = "4",
+                    Plot = "17"
+                }
+            };
+
+
+            // ------- ACT -------
+            Action act = () => parkingService.RegisterCarParkingEnd(inputDto);
+
+
+
+            // ------- ASSERT -------
+            Assert.Throws<Exception>(act);
+            Exception exception = Assert.Throws<Exception>(act);
+            Assert.Equal("Parking set to end before start time.", exception.Message);
+        }
+
+        [Fact]
+        public void TestParkingService_CarParkingStatus()
+        {
+            // Test controller endpoint using Nuget "Moq" & Fluent Assertion.
+            // Note: This tests the business logic in the parking service.
+
+            // ------- ARRANGE -------
+            var parkingService = new ParkingService(_parkingDatabase.Object);
+
+            var cpDto = new CarParkingDto
+            {
+                RegistrationNumber = "DR24465",
+                TimeOfParkingStart = DateTimeOffset.UtcNow.AddHours(-1),
+                TimeOfParkingEnd = DateTimeOffset.UtcNow.AddMinutes(-1),
+                TelephoneNumber = "+4542395827",
+                Email = "test@test.dk",
+                ParkingSpot = new ParkingSpotDto
+                {
+                    Lot = "B",
+                    Row = "4",
+                    Plot = "17"
+                }
+            };
+
+            var expectedStatusDto = new ParkingStatusDto
+            {
+                RegistrationNumber = cpDto.RegistrationNumber,
+                TimeOfParkingStart = cpDto.TimeOfParkingStart,
+                TimeOfParkingEnd = cpDto.TimeOfParkingEnd,
+                ParkingActive = false
+            };
+
+            _parkingDatabase.Setup(x => x.GetParking(cpDto.RegistrationNumber)).Returns(cpDto);
+
+            // ------- ACT -------
+            var result = parkingService.CarParkingStatus(cpDto.RegistrationNumber);
+
+
+            // ------- ASSERT -------
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(expectedStatusDto);
+        }
+
+        [Fact]
+        public void TestParkingService_CheckLocationForCar_CorrectSpot()
+        {
+            // Test controller endpoint using Nuget "Moq" & Fluent Assertion.
+            // Note: This tests the business logic in the parking service.
+            // Check if the car is at the requested parking spot.
+
+            // ------- ARRANGE -------
+            var parkingService = new ParkingService(_parkingDatabase.Object);
+
+            var cpDto = new CarParkingDto
+            {
+                RegistrationNumber = "DR24465",
+                TimeOfParkingStart = DateTimeOffset.UtcNow.AddHours(-1),
+                TelephoneNumber = "+4542395827",
+                Email = "test@test.dk",
+                ParkingSpot = new ParkingSpotDto
+                {
+                    Lot = "B",
+                    Row = "4",
+                    Plot = "17"
+                }
+            };
+
+            var plDto = new ParkingLocationDto
+            {
+                RegistrationNumber = cpDto.RegistrationNumber,
+                ParkingSpot = new ParkingSpotDto
+                {
+                    Lot = "B",
+                    Row = "4",
+                    Plot = "17"
+                }
+            };
+
+            _parkingDatabase.Setup(x => x.GetParking(cpDto.RegistrationNumber)).Returns(cpDto);
+
+            // ------- ACT -------
+            var result = parkingService.CheckLocationForCar(plDto);
+
+
+            // ------- ASSERT -------
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void TestParkingService_CheckLocationForCar_WrongSpot()
+        {
+            // Test controller endpoint using Nuget "Moq" & Fluent Assertion.
+            // Note: This tests the business logic in the parking service.
+            // Check if the car is at the requested parking spot.
+
+            // ------- ARRANGE -------
+            var parkingService = new ParkingService(_parkingDatabase.Object);
+
+            var cpDto = new CarParkingDto
+            {
+                RegistrationNumber = "DR24465",
+                TimeOfParkingStart = DateTimeOffset.UtcNow.AddHours(-1),
+                TelephoneNumber = "+4542395827",
+                Email = "test@test.dk",
+                ParkingSpot = new ParkingSpotDto
+                {
+                    Lot = "B",
+                    Row = "4",
+                    Plot = "17"
+                }
+            };
+
+            var plDto = new ParkingLocationDto
+            {
+                RegistrationNumber = cpDto.RegistrationNumber,
+                ParkingSpot = new ParkingSpotDto
+                {
+                    Lot = "A",
+                    Row = "2",
+                    Plot = "9"
+                }
+            };
+
+            _parkingDatabase.Setup(x => x.GetParking(cpDto.RegistrationNumber)).Returns(cpDto);
+
+            // ------- ACT -------
+            var result = parkingService.CheckLocationForCar(plDto);
+
+
+            // ------- ASSERT -------
+            result.Should().BeFalse();
         }
     }
 }

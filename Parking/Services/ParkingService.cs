@@ -29,6 +29,10 @@ namespace Parking.Services
             {
                 throw new Exception("No end time for parking.");
             }
+            if(dto.TimeOfParkingEnd < dto.TimeOfParkingStart)
+            {
+                throw new Exception("Parking set to end before start time.");
+            }
             if (dto.RegistrationNumber == null)
             {
                 throw new Exception("No registration number.");
