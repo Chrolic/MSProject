@@ -30,7 +30,7 @@ namespace Parking.Controllers
         public IActionResult RegisterCarParkingEnd([FromBody] CarParkingDto dto)
         {
             _parkingService.RegisterCarParkingEnd(dto);
-            return new OkResult();
+            return new NoContentResult();
         }
 
         [HttpPost]

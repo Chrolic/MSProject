@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Parking\Parking.csproj" />
     <ProjectReference Include="..\Pizzaria\Pizzaria.csproj" />
   </ItemGroup>
 
