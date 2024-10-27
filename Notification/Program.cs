@@ -1,5 +1,6 @@
 using EventStore;
 using Notification;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +22,22 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(uiOptions =>
+{
+    uiOptions.DocumentTitle = "Notification API";
+    uiOptions.EnableFilter();
+    uiOptions.DefaultModelsExpandDepth(-1);
+    uiOptions.DisplayRequestDuration();
+    uiOptions.DocExpansion(DocExpansion.None);
+    uiOptions.RoutePrefix = "";
+
+    uiOptions.SwaggerEndpoint("/swagger/v1/swagger.json", "Parking API V1");
+
+    //uiOptions.ConfigObject.AdditionalItems.Add("tagsSorter", "alpha"););
+});
 
 app.UseHttpsRedirection();
 
