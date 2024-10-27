@@ -44,7 +44,7 @@ namespace Notification.Services
 
         private async void SendCarParkingRegistrationNotification(CancellationToken cancellationToken)
         {
-            // This should be in a singleton or simelar.
+            // This should be running as a cronjob or similar.
             // Need to keep state of biggest/last read sequence number.
             // Implementation here for easy testing
 
