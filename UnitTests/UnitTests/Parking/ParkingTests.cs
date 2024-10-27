@@ -13,11 +13,14 @@ namespace UnitTests.UnitTests.Parking
     {
         private Mock<IParkingService> _parkingService;
         private Mock<IParkingDatabase> _parkingDatabase;
+        private Mock<IEventStoreService> _eventStoreService;
 
         public ParkingTests()
+
         {
             _parkingService = new Mock<IParkingService>();
             _parkingDatabase = new Mock<IParkingDatabase>();
+            _eventStoreService = new Mock<IEventStoreService>();
         }
 
 
@@ -28,6 +31,7 @@ namespace UnitTests.UnitTests.Parking
             // Note: This only tests the controller, not the underlaying businesslogic in services.
 
             // ------- ARRANGE -------
+            var cancellationToken = new CancellationTokenSource().Token;
             var parkingController = new ParkingController(_parkingService.Object);
 
             var inputDto = new CarParkingDto
@@ -52,12 +56,12 @@ namespace UnitTests.UnitTests.Parking
                 ParkingActive = true
             };
 
-            _parkingService.Setup(x => x.RegisterCarParkingStart(inputDto));
+            _parkingService.Setup(x => x.RegisterCarParkingStart(inputDto, cancellationToken));
             _parkingService.Setup(x => x.CarParkingStatus(inputDto.RegistrationNumber)).Returns(returnDtoCarParkingStatus);
 
 
             // ------- ACT -------
-            var resultParkingStart = parkingController.RegisterCarParkingStart(inputDto);
+            var resultParkingStart = parkingController.RegisterCarParkingStart(inputDto, cancellationToken);
             var resultParkingStatus = parkingController.CheckCarParkingStatus(inputDto.RegistrationNumber);
 
             // Create result object to assert on
@@ -143,7 +147,7 @@ namespace UnitTests.UnitTests.Parking
             // Note: This test against a validity check, and is expected to fail due to no registration sent in DTO.
 
             // ------- ARRANGE -------
-            var parkingService = new ParkingService(_parkingDatabase.Object);
+            var parkingService = new ParkingService(_parkingDatabase.Object, _eventStoreService.Object);
 
             var inputDto = new CarParkingDto
             {
@@ -179,7 +183,7 @@ namespace UnitTests.UnitTests.Parking
             // Note: This test against a validity check, and is expected to fail due to end time being before start time.
 
             // ------- ARRANGE -------
-            var parkingService = new ParkingService(_parkingDatabase.Object);
+            var parkingService = new ParkingService(_parkingDatabase.Object, _eventStoreService.Object);
 
             var inputDto = new CarParkingDto
             {
@@ -215,7 +219,7 @@ namespace UnitTests.UnitTests.Parking
             // Note: This tests the business logic in the parking service.
 
             // ------- ARRANGE -------
-            var parkingService = new ParkingService(_parkingDatabase.Object);
+            var parkingService = new ParkingService(_parkingDatabase.Object, _eventStoreService.Object);
 
             var cpDto = new CarParkingDto
             {
@@ -259,7 +263,7 @@ namespace UnitTests.UnitTests.Parking
             // Check if the car is at the requested parking spot.
 
             // ------- ARRANGE -------
-            var parkingService = new ParkingService(_parkingDatabase.Object);
+            var parkingService = new ParkingService(_parkingDatabase.Object, _eventStoreService.Object);
 
             var cpDto = new CarParkingDto
             {
@@ -288,6 +292,7 @@ namespace UnitTests.UnitTests.Parking
 
             _parkingDatabase.Setup(x => x.GetParking(cpDto.RegistrationNumber)).Returns(cpDto);
 
+
             // ------- ACT -------
             var result = parkingService.CheckLocationForCar(plDto);
 
@@ -304,7 +309,7 @@ namespace UnitTests.UnitTests.Parking
             // Check if the car is at the requested parking spot.
 
             // ------- ARRANGE -------
-            var parkingService = new ParkingService(_parkingDatabase.Object);
+            var parkingService = new ParkingService(_parkingDatabase.Object, _eventStoreService.Object);
 
             var cpDto = new CarParkingDto
             {

@@ -8,6 +8,6 @@ namespace Parking.Services.Interfaces
         bool CheckLocationForCar(ParkingLocationDto dto);
         void DeleteParkingInformation(string registrationNumber);
         void RegisterCarParkingEnd(CarParkingDto carParking);
-        void RegisterCarParkingStart(CarParkingDto carParking);
+        void RegisterCarParkingStart(CarParkingDto carParking , CancellationToken cancellationToken);
     }
 }

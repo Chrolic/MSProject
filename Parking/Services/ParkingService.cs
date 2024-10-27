@@ -7,19 +7,28 @@ namespace Parking.Services
     public class ParkingService : IParkingService
     {
         private readonly IParkingDatabase _parkingDatabase;
+        private readonly IEventStoreService _eventStoreService;
 
-        public ParkingService(IParkingDatabase parkingDatabase)
+        public ParkingService(IParkingDatabase parkingDatabase, IEventStoreService eventStoreService)
         {
             _parkingDatabase = parkingDatabase;
+            _eventStoreService = eventStoreService;
         }
 
 
-        public void RegisterCarParkingStart(CarParkingDto carParking)
+        public void RegisterCarParkingStart(CarParkingDto carParkingDto, CancellationToken cancellationToken)
         {
             // Do some validity check
 
             // The correct thing would be to convert to a db model before passing on to data layer.
-            _parkingDatabase.StoreParking(carParking);
+            _parkingDatabase.StoreParking(carParkingDto);
+
+            // Send event
+            _eventStoreService.CreateEvent(new CreateEventDto
+            {
+                EventName = "Parking started",
+                Content = carParkingDto
+            }, cancellationToken);
         }
 
         public void RegisterCarParkingEnd(CarParkingDto dto)

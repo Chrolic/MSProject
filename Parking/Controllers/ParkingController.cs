@@ -19,9 +19,9 @@ namespace Parking.Controllers
 
         [HttpPost]
         [ProducesResponseType(201)]
-        public IActionResult RegisterCarParkingStart([FromBody] CarParkingDto dto)
+        public IActionResult RegisterCarParkingStart([FromBody] CarParkingDto dto, CancellationToken cancellationToken)
         {
-            _parkingService.RegisterCarParkingStart(dto);
+            _parkingService.RegisterCarParkingStart(dto, cancellationToken);
             return new OkResult();
         }
 

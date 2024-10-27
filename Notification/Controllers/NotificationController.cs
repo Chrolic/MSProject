@@ -21,7 +21,7 @@ namespace Notification.Controllers
         [ProducesResponseType(201)]
         public IActionResult TestEmail([FromBody] string emailAddress)
         {
-            _notificationService.TestEmail(emailAddress, HttpContext.RequestAborted);
+            _notificationService.SendEmail(emailAddress, HttpContext.RequestAborted);
             return new OkResult();
         }
 
@@ -29,7 +29,15 @@ namespace Notification.Controllers
         [ProducesResponseType(204)]
         public IActionResult TestSms([FromBody] string phoneNumber)
         {
-            _notificationService.TestSms(phoneNumber, HttpContext.RequestAborted);
+            _notificationService.SendSms(phoneNumber, HttpContext.RequestAborted);
+            return new OkResult();
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        public IActionResult SendNotificationForNewCarParkingRegistrations(CancellationToken cancellationToken)
+        {
+            _notificationService.SendNotificationForNewCarParkingRegistrations(cancellationToken);
             return new OkResult();
         }
     }
